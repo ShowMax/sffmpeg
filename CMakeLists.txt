@@ -45,6 +45,12 @@ EXTERNALPROJECT_ADD(
   BUILD_IN_SOURCE 1
 )
 EXTERNALPROJECT_ADD(
+  fdkaac
+  URL https://github.com/mstorsjo/fdk-aac/archive/v0.1.3.tar.gz
+  CONFIGURE_COMMAND autoreconf -fiv && ./configure --prefix=${CMAKE_BINARY_DIR} --disable-shared
+  BUILD_IN_SOURCE 1
+)
+EXTERNALPROJECT_ADD(
   mp3lame
   URL http://downloads.sourceforge.net/project/lame/lame/3.99/lame-3.99.5.tar.gz
   CONFIGURE_COMMAND ./configure --prefix=${CMAKE_BINARY_DIR} --disable-shared
@@ -92,7 +98,7 @@ EXTERNALPROJECT_ADD(
   GIT_REPOSITORY git://git.videolan.org/x264.git
   # GIT_TAG 585324fe
   UPDATE_COMMAND ""
-  PATCH_COMMAND patch -p1 < ${CMAKE_SOURCE_DIR}/vendor/x264-anonymize.patch
+  #PATCH_COMMAND patch -p1 < ${CMAKE_SOURCE_DIR}/vendor/x264-anonymize.patch
   CONFIGURE_COMMAND PATH=$ENV{PATH} ./configure --prefix=${CMAKE_BINARY_DIR} --enable-static
   BUILD_COMMAND PATH=$ENV{PATH} make
   BUILD_IN_SOURCE 1
@@ -125,10 +131,10 @@ EXTERNALPROJECT_ADD(
 )
 EXTERNALPROJECT_ADD(
   ffmpeg
-  DEPENDS yasm opencore faac aacplus mp3lame ogg speex vorbis theora xvidcore x264 vpx rtmp freetype
+  DEPENDS yasm opencore faac aacplus fdkaac mp3lame ogg speex vorbis theora xvidcore x264 vpx rtmp freetype
   URL http://www.ffmpeg.org/releases/ffmpeg-2.1.tar.bz2
   PATCH_COMMAND patch -p1 < ${CMAKE_SOURCE_DIR}/vendor/libavformat-mov-audio-demux.patch
-  CONFIGURE_COMMAND PATH=$ENV{PATH} PKG_CONFIG_PATH=${CMAKE_BINARY_DIR}/lib/pkgconfig ./configure --prefix=${CMAKE_BINARY_DIR} --datadir=${CMAKE_BINARY_DIR}/etc --disable-shared --enable-static --enable-gpl --enable-version3 --enable-nonfree --disable-doc --disable-debug --disable-ffplay --disable-ffserver --disable-avdevice --disable-outdevs --enable-runtime-cpudetect --enable-memalign-hack --extra-cflags=-I${CMAKE_BINARY_DIR}/include\ --static --extra-ldflags=-L${CMAKE_BINARY_DIR}/lib\ -static --extra-libs=-ldl --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libfaac --enable-libaacplus --enable-libmp3lame --enable-libspeex --enable-libtheora --enable-libvorbis --enable-libx264 --enable-libxvid --enable-libvpx --enable-librtmp --enable-libfreetype
+  CONFIGURE_COMMAND PATH=$ENV{PATH} PKG_CONFIG_PATH=${CMAKE_BINARY_DIR}/lib/pkgconfig ./configure --prefix=${CMAKE_BINARY_DIR} --datadir=${CMAKE_BINARY_DIR}/etc --disable-shared --enable-static --enable-gpl --enable-version3 --enable-nonfree --disable-doc --disable-debug --disable-ffplay --disable-ffserver --disable-avdevice --disable-outdevs --enable-runtime-cpudetect --enable-memalign-hack --extra-cflags=-I${CMAKE_BINARY_DIR}/include\ --static --extra-ldflags=-L${CMAKE_BINARY_DIR}/lib\ -static --extra-libs=-ldl --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libfaac --enable-libaacplus --enable-libmp3lame --enable-libspeex --enable-libtheora --enable-libvorbis --enable-libx264 --enable-libxvid --enable-libvpx --enable-librtmp --enable-libfreetype --enable-libfdk_aac
   BUILD_COMMAND PATH=$ENV{PATH} make
   BUILD_IN_SOURCE 1
 )
